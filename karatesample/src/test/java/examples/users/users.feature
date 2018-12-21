@@ -1,17 +1,9 @@
-Feature: sample karate test script    
-    If you are using Eclipse, install the free Cucumber-Eclipse plugin from
-    https://cucumber.io/cucumber-eclipse/
-    Then you will see syntax-coloring for this file. But best of all,
-    you will be able to right-click within this file and [Run As -> Cucumber Feature].
-    If you see warnings like "does not have a matching glue code",
-    go to the Eclipse preferences, find the 'Cucumber User Settings'
-    and enter the following Root Package Name: com.intuit.karate    
-    Refer to the Cucumber-Eclipse wiki for more: http://bit.ly/2mDaXeV
+Feature: Availability Demo Call for Self Connect
 
 Background:
 * url 'https://jsonplaceholder.typicode.com'
 
-Scenario: get all users and then get the first user by id
+Scenario: Get available rates for item
 
 Given path 'users'
 When method get
@@ -23,30 +15,36 @@ Given path 'users', first.id
 When method get
 Then status 200
 
-Scenario: create a user and then get it by id
+Scenario: Get available rates for item
 
-* def user =
+* def body =
 """
 {
-  "name": "Test User",
-  "username": "testuser",
-  "email": "test@user.com",
-  "address": {
-    "street": "Has No Name",
-    "suite": "Apt. 123",
-    "city": "Electri",
-    "zipcode": "54321-6789"
-  }
+  api_version: 1,
+	hotel: {
+    item_id: 5002,
+    partner_reference: '5002'
+  },
+  start_date: '2019-01-21',
+  end_date: '2019-01-23',
+  party: [{
+    adults: 2,
+    children: [1]
+  }],
+  lang:'en_US',
+  currency:'USD',
+  user_country:'US'
 }
 """
 
-Given url 'https://jsonplaceholder.typicode.com/users'
-And request user
+Given url 'https://tbec-mock-advertiser-qa.dus.tcs.trivago.cloud/api/v1/booking_availability'
+And header Authorization = 'Basic cWE6Y2FzZV9zdHVkeQ=='
+And request body
 When method post
-Then status 201
+Then status 200
 
-* def id = response.id
-* print 'created id is: ' + id
+* def hotel_name = response.hotel_details.name
+* print 'Hotel Name is: ' + hotel_name
 
 Given path id
 # When method get
