@@ -31,8 +31,8 @@ Feature: Payments
     And request body
     When method post
     Then status 200
-    * def payment = response.room_types_array[0].payment_methods
-    * match payment == '#array'
+    * match response.room_types_array[0].payment_methods == '#array'
+    * match response.room_types_array[0].payment_methods[0].options == '#array'
     * match response.room_types_array[0].payment_methods[0].options[*].code contains '<type>'
 
     Examples: 
