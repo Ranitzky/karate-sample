@@ -1,36 +1,11 @@
 #Author: Rico Wilcke
 Feature: Hotel information
 
-  Background: 
-    * def endpoint = 'https://tbec-mock-advertiser-qa.dus.tcs.trivago.cloud'
-    * def body =
-      """
-      {
-        api_version: 1,
-      	hotel: {
-          item_id: 5002,
-          partner_reference: '5002'
-        },
-        start_date: '2019-01-21',
-        end_date: '2019-01-23',
-        party: [{
-          adults: 2,
-          children: [1]
-        }],
-        lang:'en_US',
-        currency:'USD',
-        user_country:'US'
-      }
-      """
-
   @hotel
   Scenario: I get valid hotel information from the advertiser
-    Given url endpoint
-    And path '/api/v1/booking_availability'
-    And header Authorization = 'Basic cWE6Y2FzZV9zdHVkeQ=='
-    And request body
-    When method post
-    Then status 200
+		
+		* json myReq = read('classpath:examples/availability/request.json')
+    * call read('classpath:examples/availability/request.feature') myReq
     #
     # save details from response
     * def hotel_details = response.hotel_details
