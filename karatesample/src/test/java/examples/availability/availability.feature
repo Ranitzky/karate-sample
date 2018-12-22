@@ -22,7 +22,7 @@ Feature: Availability Call for Self Connect
       }
       """
 
-  Scenario: I get hotel information from the advertiser
+  Scenario: I get valid hotel information from the advertiser
     Given url endpoint
     And path '/api/v1/booking_availability'
     And header Authorization = 'Basic cWE6Y2FzZV9zdHVkeQ=='
@@ -55,3 +55,44 @@ Feature: Availability Call for Self Connect
     * print hotel_address1
     * print hotel_address2
     * print hotel_country + ' - ' + hotel_postal_code, hotel_city
+
+  Scenario: I get valid customer support information on successful request
+    Given url endpoint
+    And path '/api/v1/booking_availability'
+    And header Authorization = 'Basic cWE6Y2FzZV9zdHVkeQ=='
+    And request body
+    When method post
+    Then status 200
+    #
+    # save details from response
+    * def customer_support = response.customer_support
+    #
+    # validate response
+    * match customer_support == '#object'
+    * match customer_support.phone_numbers == '#array'
+    * match customer_support.phone_numbers[0].contact == '#notnull'
+    * match customer_support.emails == '#array'
+    * match customer_support.emails[0].contact == '#notnull'    
+    * match customer_support.urls == '#array'
+    * match customer_support.urls[0].contact == '#notnull'
+  
+
+  Scenario: I get valid customer support information on faulty request
+    Given url endpoint
+    And path '/api/v1/booking_availability'
+    And header Authorization = 'Basic cWE6Y2FzZV9zdHVkeQ=='
+    And request ''
+    When method post
+    Then status 200
+    #
+    # save details from response
+    * def customer_support = response.customer_support
+    #
+    # validate response
+    * match customer_support == '#object'
+    * match customer_support.phone_numbers == '#array'
+    * match customer_support.phone_numbers[0].contact == '#notnull'
+    * match customer_support.emails == '#array'
+    * match customer_support.emails[0].contact == '#notnull'    
+    * match customer_support.urls == '#array'
+    * match customer_support.urls[0].contact == '#notnull'
