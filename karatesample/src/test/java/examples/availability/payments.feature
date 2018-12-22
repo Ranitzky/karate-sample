@@ -6,31 +6,11 @@ Feature: Payments
 
   @payment
   Scenario Outline: I get the correct payments for each item
-    * def body =
-      """
-      {
-        api_version: 1,
-      	hotel: {
-          item_id: <item>,
-          partner_reference: '5002'
-        },
-        start_date: '2019-01-01',
-        end_date: '2019-01-02',
-        party: [{
-          adults: 2,
-          children: [1]
-        }],
-        lang:'en_US',
-        currency:'USD',
-        user_country:'US'
-      }
-      """
-    Given url endpoint
-    And path '/api/v1/booking_availability'
-    And header Authorization = 'Basic cWE6Y2FzZV9zdHVkeQ=='
-    And request body
-    When method post
-    Then status 200
+    * json myReq = read('classpath:examples/availability/request.json')
+    * call read('classpath:examples/availability/request.feature') myReq
+    * replace myReq
+      | token   | value  |
+      | ${item} | <item> |
     * match response.room_types_array[0].payment_methods == '#array'
     * match response.room_types_array[0].payment_methods[0].options == '#array'
     * match response.room_types_array[0].payment_methods[0].options[*].code contains '<type>'
