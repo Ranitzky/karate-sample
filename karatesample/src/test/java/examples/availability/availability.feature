@@ -70,12 +70,11 @@ Feature: Availability Call for Self Connect
     # validate response
     * match customer_support == '#object'
     * match customer_support.phone_numbers == '#array'
-    * match customer_support.phone_numbers[0].contact == '#notnull'
+    * match each customer_support.phone_numbers contains {contact: '#notnull' }
     * match customer_support.emails == '#array'
-    * match customer_support.emails[0].contact == '#notnull'    
+    * match each customer_support.emails contains {contact: '#notnull' }
     * match customer_support.urls == '#array'
-    * match customer_support.urls[0].contact == '#notnull'
-  
+    * match each customer_support.urls contains {contact: '#notnull' }
 
   Scenario: I get valid customer support information on faulty request
     Given url endpoint
@@ -91,8 +90,32 @@ Feature: Availability Call for Self Connect
     # validate response
     * match customer_support == '#object'
     * match customer_support.phone_numbers == '#array'
-    * match customer_support.phone_numbers[0].contact == '#notnull'
+    * match each customer_support.phone_numbers contains {contact: '#notnull' }
     * match customer_support.emails == '#array'
-    * match customer_support.emails[0].contact == '#notnull'    
+    * match each customer_support.emails contains {contact: '#notnull' }
     * match customer_support.urls == '#array'
-    * match customer_support.urls[0].contact == '#notnull'
+    * match each customer_support.urls contains {contact: '#notnull' }
+
+  Scenario: I receive rates for the requested parameters
+
+  Scenario: I verify, that the start date is before the end date
+    Given url endpoint
+    And path '/api/v1/booking_availability'
+    And header Authorization = 'Basic cWE6Y2FzZV9zdHVkeQ=='
+    And request body
+    When method post
+    Then status 200
+    And def startDate = response.start_date
+    And def endDate = response.end_date
+    And match startDate == '2019-01-21'
+    And match endDate == '2019-01-23'
+    * def a = new Date(startDate)
+		* def b = new Date(endDate)
+		* def result = a.getTime() < b.getTime()
+ 		And match result == true
+
+#  Scenario: I verify, that I receive an error, when end date is prior start date
+
+#  Scenario: I get rates for 3 short term stays
+
+#  Scenario: I get rates for 3 long term stays
