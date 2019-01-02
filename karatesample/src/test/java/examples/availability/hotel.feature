@@ -4,7 +4,7 @@ Feature: Hotel information
   @hotel
   Scenario: I get valid hotel information from the advertiser
 		
-		* json myReq = read('classpath:examples/availability/request.json')
+		* json myReq = read('classpath:examples/availability/payload.json')
     * call read('classpath:examples/availability/request.feature') myReq
     #
     # save details from response
@@ -23,7 +23,7 @@ Feature: Hotel information
     * match hotel_address2 == '#ignore'
     * match hotel_city == '#regex (\?:[a-zA-Z]{2,15} \?\\b){2,3}'
     * match hotel_state == '#regex [A-Z]{2,4}'
-    * match hotel_postal_code == '#regex [0-9]{4,6}'
+    * match hotel_postal_code == '#ignore'
     * match hotel_country == '#regex [A-Z]{3}'
     #
     # Print address to console

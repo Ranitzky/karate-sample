@@ -1,7 +1,8 @@
 #Author: Rico Wilcke
+
+@ignore
 Feature: Basic API Call
 
-  @request
   Scenario: I can make a availability request
     Given url endpoint
     And path '/api/v1/booking_availability'

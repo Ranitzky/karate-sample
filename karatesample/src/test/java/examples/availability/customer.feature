@@ -4,7 +4,7 @@ Feature: Customer support information
   @customer
   Scenario: I get valid customer support information on successful request
 
-		* json myReq = read('classpath:examples/availability/request.json')
+		* json myReq = read('classpath:examples/availability/payload.json')
     * call read('classpath:examples/availability/request.feature') myReq
     #
     # save details from response
@@ -22,7 +22,7 @@ Feature: Customer support information
   @customer
   Scenario: I get valid customer support information on faulty request
   
-		* json myReq = read('classpath:examples/availability/invalid.json')
+		* json myReq = read('classpath:examples/availability/empty.json')
     * call read('classpath:examples/availability/request.feature') myReq
     #
     # save details from response
